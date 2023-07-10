@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizations</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="visualization"></div>
+
+    <label for="x-input">X-Values:</label>
+    <input type="text" id="x-input" value="1, 2, 3, 4, 5">
+    <br>
+
+    <label for="y-input">Y-Values:</label>
+    <input type="text" id="y-input" value="2, 4, 6, 8, 10">
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parameters</title>
+</head>
+<body>
+    <h1>Parameters for {{ learning_type }}</h1>
+    <form method="POST" action="/process_params">
+        <h3>Trial Parameters:</h3>
+        {% for trial_param in params.trial_params %}
+            {{ trial_param }}: <textarea name="trial_params" rows="1" cols="5"></textarea><br><br>
+        {% endfor %}
+        <h3>Model Parameters:</h3>
+        {% for model_param in params.model_params %}
+            {{ model_param }}: <textarea name="model_params" rows="1" cols="5"></textarea><br><br>
+        {% endfor %}
+        <input type="submit" value="Submit Values">
+    </form>
+</body>
+</html>

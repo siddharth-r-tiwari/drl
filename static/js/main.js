@@ -1,5 +1,5 @@
 
-document.addEventListener("DOMContentLoaded", function() {
+/*document.addEventListener("DOMContentLoaded", function() {
     var xInput = document.getElementById('x-input');
     var yInput = document.getElementById('y-input');
   
@@ -44,4 +44,4 @@ document.addEventListener("DOMContentLoaded", function() {
     
     xInput.addEventListener('input', updatePlot);
     yInput.addEventListener('input', updatePlot);
-});
+});*/

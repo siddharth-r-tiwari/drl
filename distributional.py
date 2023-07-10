@@ -4,5 +4,6 @@ import numpy as np
 import pandas as pd
 
 def run_sim(trial_params, model_params):
-    result = {'x': [float(v) + 1 for v in trial_params], 'y': [float(v) - 4 for v in trial_params]}
+    dt = np.arange(float(trial_params[0]), 10, 0.25).tolist()
+    result = {'x': dt, 'y': [v * float(trial_params[2]) for v in range(len(dt))]}
     return json.dumps(result)

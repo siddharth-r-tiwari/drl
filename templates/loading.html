@@ -1,39 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Loading...</title>
+    <title>Visualizations</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-        // JavaScript code for redirecting to visualizations.html after the simulation is completed
-        function redirectToVisualizations() {
-            window.location.href = '/visualizations';
-        }
-
-        // Make an AJAX request to start the simulation and handle the response
-        function startSimulation() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/process_params', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.redirect_url) {
-                            window.location.href = response.redirect_url;
-                        }
-                    }
-                }
-            };
-            xhr.send();
-        }
-
-        // Call the startSimulation function when the page loads
-        window.onload = function() {
-            startSimulation();
-        };
-    </script>
 </head>
 <body>
-    <h1>Loading...</h1>
+    <script>
+        var vals = {{ vals|tojson }};
+
+        window.onload=function(){
+            var xValues = vals.t;
+            y = [];
+            V = vals.V; 
+
+            for (var i = 0; i < V.length; i++) {
+                var v = V[i];
+                
+                if (n < v.length) {
+                  y.push(v[n]);
+                } else {
+                  y.push(null);
+                }
+            }
+            var yValues = y;
+
+            var trace = {
+                x: xValues,
+                y: yValues,
+                type: 'scatter'
+            };
+
+            var layout = {
+                title: 'Data Visualization',
+                font: {
+                    family: 'Times New Roman, serif',
+                    size: 14
+                }
+            };
+
+            var config = {
+                responsive: true
+            };
+
+            Plotly.newPlot('visualization', [trace], layout, config);
+        }
+
+            
+        /*#var xInput = document.getElementById('x-input');
+            var yInput = document.getElementById('y-input');
+
+            function updatePlot() {
+                var xValues = xInput.value.split(',').map(Number);
+                var yValues = yInput.value.split(',').map(Number);
+
+                trace.x = xValues;
+                trace.y = yValues;
+
+                layout.xaxis.range = [Math.min(...xValues), Math.max(...xValues)];
+                layout.yaxis.range = [Math.min(...yValues), Math.max(...yValues)];
+
+                Plotly.update('visualization', [trace], layout);
+            }
+
+            xInput.addEventListener('input', updatePlot);
+            yInput.addEventListener('input', updatePlot);*/
+
+    </script>
+
+    <div id="visualization"></div>
+
+    <label for="x-input">X-Values:</label>
+    <input type="text" id="x-input" value="1, 2, 3, 4, 5">
+    <br>
+
+    <label for="y-input">Y-Values:</label>
+    <input type="text" id="y-input" value="2, 4, 6, 8, 10">
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

@@ -1,3 +1,28 @@
+function ValOfStep_OverTime(V, n){
+  traces = [];
+  x = [];
+  y = [];
+
+  for (var i = 0; i < V.length; i++) {
+    var v = V[i];
+    
+    if (n < v.length) {
+      y.push(v[n]);
+    } else {
+      y.push(null);
+    }
+    x.push(i);
+  }
+
+  return {
+    x: x,
+    y: y,
+    type: 'scatter'
+  }
+
+}
+
+
 
 /*document.addEventListener("DOMContentLoaded", function() {
     var xInput = document.getElementById('x-input');

@@ -11,27 +11,7 @@
         var vals = JSON.parse('{{ vals|safe }}');
 
         window.onload=function(){
-            var xValues = vals.t;
-            n = 10;
-            y = [];
-            V = vals.V; 
-
-            for (var i = 0; i < V.length; i++) {
-                var v = V[i];
-                
-                if (n < v.length) {
-                  y.push(v[n]);
-                } else {
-                  y.push(null);
-                }
-            }
-            var yValues = y;
-    
-            var trace = {
-                x: xValues,
-                y: yValues,
-                type: 'scatter'
-            };
+            var traces = ValOfStep_OverTime(vals.V, 10);
     
             var layout = {
                 title: 'Data Visualization',
@@ -45,38 +25,36 @@
                 responsive: true
             };
     
-            Plotly.newPlot('visualization', [trace], layout, config);
+            Plotly.newPlot('visualization', [traces], layout, config);
 
-            var xInput = document.getElementById('x-input');
-            var yInput = document.getElementById('y-input');
+            var ptInput = document.getElementById('pt');
     
             function updatePlot() {
-                var xValues = xInput.value.split(',').map(Number);
-                var yValues = yInput.value.split(',').map(Number);
+                var n = parseInt(ptInput.value);
+                console.log(n);
     
-                trace.x = xValues;
-                trace.y = yValues;
+                update = ValOfStep_OverTime(vals.V, n);
+                traces.x = update.x;
+                traces.y = update.y;
+                console.log(traces);
     
-                layout.xaxis.range = [Math.min(...xValues), Math.max(...xValues)];
-                layout.yaxis.range = [Math.min(...yValues), Math.max(...yValues)];
-    
-                Plotly.update('visualization', [trace], layout);
+                layout.yaxis.range = [Math.min(...traces.y), Math.max(...traces.y)];
+
+                Plotly.update('visualization', [traces], layout, config);
             }
     
-            xInput.addEventListener('input', updatePlot);
-            yInput.addEventListener('input', updatePlot);
+            ptInput.addEventListener('input', updatePlot);
         }
 
 
     </script>
 
-    <label for="x-input">X-Values:</label>
-    <input type="text" id="x-input" value="1, 2, 3, 4, 5">
+    <label for="pt">Point:</label>
+    <input type="text" id="pt" value="10">
     <br>
 
-    <label for="y-input">Y-Values:</label>
-    <input type="text" id="y-input" value="2, 4, 6, 8, 10">
-
     {{vals}}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
 </body>
 </html>

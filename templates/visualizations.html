@@ -5,13 +5,18 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <div id="visualization"></div>
+    <div id="valovertime"></div>
+
+    <div id="animation"></div>
+
 
     <script>
         var vals = JSON.parse('{{ vals|safe }}');
 
         window.onload=function(){
-            var traces = ValOfStep_OverTime(vals.V, 10);
+            var V = vals.V;
+
+            var traces = ValOfStep_OverTime(V, 10);
     
             var layout = {
                 title: 'Data Visualization',
@@ -25,7 +30,49 @@
                 responsive: true
             };
     
-            Plotly.newPlot('visualization', [traces], layout, config);
+            Plotly.newPlot('valovertime', [traces], layout, config);
+
+            var data = [
+                { x: [], y: [], mode: 'lines', name: 'V(t)' },
+                { x: [], y: [], mode: 'lines', name: 'Reward' }
+            ];
+
+            var layout = {
+                title: 'Animation',
+                xaxis: { title: 'Time (s)' },
+                yaxis: { range: [-1, 1] },
+                showlegend: true,
+                font: {
+                    family: 'Times New Roman, serif',
+                    size: 14
+                }
+            };
+
+            function animationdata(frame) {
+
+                data[0].x = vals.t;
+                data[0].y = V[frame];
+
+                data[1].x = vals.t;
+                data[1].y = vals.r;
+
+                layout.title = 'Trial: ' + (frame + 1);
+
+                return { data: data, layout: layout };
+            }
+
+            async function updateAnimation (frame){
+                await sleep(100); 
+                Plotly.animate('animation', animationdata(frame).data, animationdata(frame).layout)
+            }
+
+
+            Plotly.plot('animation', animationdata(0).data, animationdata(0).layout)
+
+
+            for (var frame = 0; frame < V.length; frame++) {
+                updateAnimation(frame);
+            }
 
             var ptInput = document.getElementById('pt');
     
@@ -33,14 +80,13 @@
                 var n = parseInt(ptInput.value);
                 console.log(n);
     
-                update = ValOfStep_OverTime(vals.V, n);
+                update = ValOfStep_OverTime(V, n);
                 traces.x = update.x;
                 traces.y = update.y;
-                console.log(traces);
     
                 layout.yaxis.range = [Math.min(...traces.y), Math.max(...traces.y)];
 
-                Plotly.update('visualization', [traces], layout, config);
+                Plotly.update('valovertime', [traces], layout, config);
             }
     
             ptInput.addEventListener('input', updatePlot);

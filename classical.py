@@ -40,10 +40,10 @@ def run_sim(trial_params, model_params):
 
     # Value function
     V = []
-    v = np.zeros(steps)
-    for t in range(steps):
-        v[t] = np.dot(w, x[:, t])
-    V.append(v.tolist())
+    # v = np.zeros(steps)
+    # for t in range(steps):
+    #     v[t] = np.dot(w, x[:, t])
+    # V.append(v.tolist())
 
     #deltas
     delta_list = []
@@ -69,5 +69,5 @@ def run_sim(trial_params, model_params):
 
         delta_list.append(delta)
 
-    return json.dumps({"t" : T.tolist(), "V": V})
+    return json.dumps({"t" : T.tolist(), "V": V, "r" : r.tolist()})
 
